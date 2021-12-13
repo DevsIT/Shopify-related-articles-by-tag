@@ -1,0 +1,31 @@
+  <div class="grid">
+            {% assign acounter = 1 %}
+            {% assign counter = 0 %}
+            {% for tag in article.tags %}
+            
+            {% assign skip_articles = article.handle | split: '.....' %}
+            {% for related_article in blog.articles %}
+            {% if related_article.tags contains tag and counter < 3 %}
+            {% unless skip_articles contains related_article.handle %}
+            {% assign counter = counter | plus: 1 %}
+            {% assign temp = related_article.handle | split: '.....' %}
+            {% assign skip_articles = skip_articles | concat: temp %}
+            <div class="well">
+              {%- render 'related-article-grid-item',
+              blog: blog,
+              article: related_article,
+              grid_item_width: 'small--one-whole medium-up--one-third',
+              per_row: '3',
+              image_size: 'master'
+              -%}
+            </div>
+
+            {% assign acounter = acounter | plus: 1 %}
+
+            {% endunless %}
+            {% endif %}
+            
+            {% endfor %}
+            {% endfor %}
+
+          </div>
